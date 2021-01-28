@@ -11,14 +11,14 @@ if [ -z "${SLAVE_NAME}" ]; then
     exit 10
 fi
 
-ps -ax | grep "bhyve: ${SLAVE_NAME}" | grep -v grep > /dev/null
-if [ $? -eq 0 ]; then
-    echo "bhyve already running"
-    exit 15
-fi
-
 if [ ! -d /usr/local/vm/${SLAVE_NAME} ]; then
     sudo vm create ${SLAVE_NAME}
+else
+    ps -ax | grep "bhyve: ${SLAVE_NAME}" | grep -v grep > /dev/null
+    if [ $? -eq 0 ]; then
+        echo "bhyve already running"
+        exit 15
+    fi
 fi
 
 # Override VM specs
